@@ -8,6 +8,7 @@ import {
   getPatternById,
   resolvePatternIdForWeek
 } from '../utils/meal';
+import { createId } from '../utils/uuid';
 import MealAssignModal from './MealAssignModal';
 import MealDetailModal from './MealDetailModal';
 import Modal from './Modal';
@@ -71,7 +72,7 @@ export default function WeekView() {
       (block) => !removeBlocks.some((remove) => remove.id === block.id)
     );
     nextBlocks.push({
-      id: crypto.randomUUID(),
+      id: createId(),
       recipeId,
       startDayIndex,
       durationDays

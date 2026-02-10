@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import type { Ingredient } from '../types';
+import { createId } from '../utils/uuid';
 import Modal from './Modal';
 
 interface IngredientEditorProps {
@@ -36,7 +37,7 @@ export default function IngredientEditor({ isOpen, initial, onClose, onSave }: I
             onClick={() => {
               if (!canSave) return;
               onSave({
-                id: initial?.id ?? crypto.randomUUID(),
+                id: initial?.id ?? createId(),
                 name: name.trim(),
                 unit: unit.trim()
               });

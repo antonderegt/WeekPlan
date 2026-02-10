@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import type { Ingredient, Recipe, RecipeIngredient } from '../types';
 import Modal from './Modal';
+import { createId } from '../utils/uuid';
 
 interface RecipeEditorProps {
   isOpen: boolean;
@@ -77,7 +78,7 @@ export default function RecipeEditor({
                 .map((line) => line.trim())
                 .filter(Boolean);
               onSave({
-                id: initial?.id ?? crypto.randomUUID(),
+                id: initial?.id ?? createId(),
                 name: name.trim(),
                 ingredients: items,
                 steps

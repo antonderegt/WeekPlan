@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import type { Pattern, Settings } from '../types';
 import { getWeekStart, toISODate } from '../utils/date';
 import { resolvePatternIdForWeek } from '../utils/meal';
+import { createId } from '../utils/uuid';
 import { useData } from '../store/DataContext';
 
 function nextPatternName(existing: Pattern[]): string {
@@ -51,7 +52,7 @@ export default function SettingsView() {
 
   const handleAddPattern = async () => {
     const name = nextPatternName(patterns);
-    const id = crypto.randomUUID();
+    const id = createId();
     await upsertPattern({ id, name, mealBlocks: [] });
     await upsertSettings({ ...settings, patternOrder: [...settings.patternOrder, id] });
   };

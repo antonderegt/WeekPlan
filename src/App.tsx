@@ -3,6 +3,7 @@ import { NavLink, Route, Routes } from 'react-router-dom';
 import type { Pattern, Settings } from './types';
 import { getWeekStart, toISODate } from './utils/date';
 import { resolvePatternIdForWeek } from './utils/meal';
+import { createId } from './utils/uuid';
 import WeekView from './components/WeekView';
 import RecipeList from './components/RecipeList';
 import IngredientList from './components/IngredientList';
@@ -14,8 +15,8 @@ const SETTINGS_ID = 'settings';
 
 function defaultPatterns(): Pattern[] {
   return [
-    { id: crypto.randomUUID(), name: 'Week A', mealBlocks: [] },
-    { id: crypto.randomUUID(), name: 'Week B', mealBlocks: [] }
+    { id: createId(), name: 'Week A', mealBlocks: [] },
+    { id: createId(), name: 'Week B', mealBlocks: [] }
   ];
 }
 
