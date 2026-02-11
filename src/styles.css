@@ -280,9 +280,17 @@ textarea {
 
 .ingredient-row {
   display: grid;
-  grid-template-columns: 1.3fr 0.6fr 0.6fr auto;
+  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.6fr) minmax(0, 0.6fr) auto;
   gap: 10px;
   align-items: center;
+}
+
+.ingredient-row > * {
+  min-width: 0;
+}
+
+.ingredient-row button {
+  justify-self: end;
 }
 
 .modal-backdrop {
