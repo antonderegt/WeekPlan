@@ -5,7 +5,7 @@ import path from 'path';
 
 const app = express();
 const port = Number(process.env.PORT ?? 3000);
-const dbPath = process.env.DB_PATH ?? '/data/weekplan.db';
+const dbPath = process.env.DB_PATH ?? path.join(process.cwd(), 'data', 'weekplan.db');
 
 fs.mkdirSync(path.dirname(dbPath), { recursive: true });
 
