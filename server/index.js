@@ -154,6 +154,103 @@ app.put('/api/settings', (req, res) => {
   res.status(204).end();
 });
 
+// ── Export / Import ──────────────────────────────────────────────────
+
+app.get('/api/export', (_req, res) => {
+  const ingredients = db.prepare('SELECT id, name, unit FROM ingredients ORDER BY name').all();
+
+  const recipeRows = db.prepare('SELECT id, name, ingredients_json, steps_json FROM recipes ORDER BY name').all();
+  const recipes = recipeRows.map((r) => ({
+    id: r.id,
+    name: r.name,
+    ingredients: parseJson(r.ingredients_json, []),
+    steps: parseJson(r.steps_json, [])
+  }));
+
+  const patternRows = db.prepare('SELECT id, name, mealBlocks_json FROM patterns ORDER BY name').all();
+  const patterns = patternRows.map((r) => ({
+    id: r.id,
+    name: r.name,
+    mealBlocks: parseJson(r.mealBlocks_json, [])
+  }));
+
+  const settingsRow = db.prepare('SELECT id, patternStartDate, patternOrder_json FROM settings WHERE id = ?').get('settings');
+  const settings = settingsRow
+    ? { id: settingsRow.id, patternStartDate: settingsRow.patternStartDate, patternOrder: parseJson(settingsRow.patternOrder_json, []) }
+    : null;
+
+  res.json({
+    exportedAt: new Date().toISOString(),
+    version: 1,
+    ingredients,
+    recipes,
+    patterns,
+    settings
+  });
+});
+
+app.post('/api/import', (req, res) => {
+  const data = req.body;
+
+  if (!data || data.version !== 1) {
+    res.status(400).send('Invalid or unsupported export file.');
+    return;
+  }
+
+  if (!Array.isArray(data.ingredients) || !Array.isArray(data.recipes) || !Array.isArray(data.patterns)) {
+    res.status(400).send('Export file is missing required data arrays.');
+    return;
+  }
+
+  const importTransaction = db.transaction(() => {
+    // Clear all tables
+    db.prepare('DELETE FROM ingredients').run();
+    db.prepare('DELETE FROM recipes').run();
+    db.prepare('DELETE FROM patterns').run();
+    db.prepare('DELETE FROM settings').run();
+
+    // Insert ingredients
+    const insertIngredient = db.prepare('INSERT INTO ingredients (id, name, unit) VALUES (?, ?, ?)');
+    for (const ing of data.ingredients) {
+      if (ing.id && ing.name && ing.unit) {
+        insertIngredient.run(ing.id, ing.name, ing.unit);
+      }
+    }
+
+    // Insert recipes
+    const insertRecipe = db.prepare('INSERT INTO recipes (id, name, ingredients_json, steps_json) VALUES (?, ?, ?, ?)');
+    for (const recipe of data.recipes) {
+      if (recipe.id && recipe.name) {
+        insertRecipe.run(recipe.id, recipe.name, JSON.stringify(recipe.ingredients ?? []), JSON.stringify(recipe.steps ?? []));
+      }
+    }
+
+    // Insert patterns
+    const insertPattern = db.prepare('INSERT INTO patterns (id, name, mealBlocks_json) VALUES (?, ?, ?)');
+    for (const pattern of data.patterns) {
+      if (pattern.id && pattern.name) {
+        insertPattern.run(pattern.id, pattern.name, JSON.stringify(pattern.mealBlocks ?? []));
+      }
+    }
+
+    // Insert settings
+    if (data.settings && data.settings.id) {
+      db.prepare('INSERT INTO settings (id, patternStartDate, patternOrder_json) VALUES (?, ?, ?)').run(
+        data.settings.id,
+        data.settings.patternStartDate ?? '',
+        JSON.stringify(data.settings.patternOrder ?? [])
+      );
+    }
+  });
+
+  try {
+    importTransaction();
+    res.status(204).end();
+  } catch (err) {
+    res.status(500).send('Import failed: ' + (err instanceof Error ? err.message : 'unknown error'));
+  }
+});
+
 const distPath = path.resolve(process.cwd(), 'dist');
 if (fs.existsSync(distPath)) {
   app.use(express.static(distPath));

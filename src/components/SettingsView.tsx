@@ -1,9 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { Pattern, Settings } from '../types';
 import { getWeekStart, toISODate } from '../utils/date';
 import { resolvePatternIdForWeek } from '../utils/meal';
 import { createId } from '../utils/uuid';
 import { useData } from '../store/DataContext';
+import { exportData, importData } from '../api/client';
 
 function nextPatternName(existing: Pattern[]): string {
   const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -16,8 +17,11 @@ function nextPatternName(existing: Pattern[]): string {
 }
 
 export default function SettingsView() {
-  const { patterns, settings, loading, upsertSettings, upsertPattern, removePattern } = useData();
+  const { patterns, settings, loading, upsertSettings, upsertPattern, removePattern, refreshAll } = useData();
   const [startDate, setStartDate] = useState('');
+  const [dataStatus, setDataStatus] = useState<{ type: 'success' | 'error'; message: string } | null>(null);
+  const [importing, setImporting] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     setStartDate(settings?.patternStartDate ?? '');
@@ -73,6 +77,45 @@ export default function SettingsView() {
       ...settings,
       patternOrder: settings.patternOrder.filter((id) => id !== pattern.id)
     });
+  };
+
+  const handleExport = async () => {
+    setDataStatus(null);
+    try {
+      await exportData();
+      setDataStatus({ type: 'success', message: 'Data exported successfully.' });
+    } catch {
+      setDataStatus({ type: 'error', message: 'Failed to export data.' });
+    }
+  };
+
+  const handleImportClick = () => {
+    setDataStatus(null);
+    fileInputRef.current?.click();
+  };
+
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+    // Reset the input so the same file can be selected again
+    event.target.value = '';
+
+    const confirmed = window.confirm(
+      'Importing will replace ALL existing data (ingredients, recipes, patterns, and settings). This cannot be undone.\n\nContinue?'
+    );
+    if (!confirmed) return;
+
+    setImporting(true);
+    setDataStatus(null);
+    try {
+      await importData(file);
+      await refreshAll();
+      setDataStatus({ type: 'success', message: 'Data imported successfully.' });
+    } catch (err) {
+      setDataStatus({ type: 'error', message: err instanceof Error ? err.message : 'Failed to import data.' });
+    } finally {
+      setImporting(false);
+    }
   };
 
   const defaultStart = toISODate(getWeekStart(new Date()));
@@ -146,6 +189,31 @@ export default function SettingsView() {
               </div>
             ))}
           </div>
+        )}
+      </div>
+
+      <div className="card">
+        <div className="section-header">
+          <h3>Data</h3>
+        </div>
+        <p className="helper" style={{ marginTop: 0 }}>Export all data as a JSON file or import from a previous export.</p>
+        <div className="data-actions">
+          <button type="button" onClick={handleExport}>
+            Export data
+          </button>
+          <button type="button" className="ghost" onClick={handleImportClick} disabled={importing}>
+            {importing ? 'Importing…' : 'Import data'}
+          </button>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".json,application/json"
+            style={{ display: 'none' }}
+            onChange={handleFileChange}
+          />
+        </div>
+        {dataStatus && (
+          <p className={`data-status ${dataStatus.type}`}>{dataStatus.message}</p>
         )}
       </div>
     </div>

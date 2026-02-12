@@ -79,3 +79,34 @@ export function saveSettings(settings: Settings): Promise<void> {
     }
   );
 }
+
+export async function exportData(): Promise<void> {
+  const response = await fetch('/api/export');
+  if (!response.ok) {
+    throw new Error('Export failed');
+  }
+  const data = await response.json();
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  const date = new Date().toISOString().slice(0, 10);
+  a.download = `weekplan-export-${date}.json`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+export async function importData(file: File): Promise<void> {
+  const text = await file.text();
+  const data = JSON.parse(text);
+  if (!data || data.version !== 1) {
+    throw new Error('Invalid or unsupported export file.');
+  }
+  return fetchJson('/api/import', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: text
+  });
+}
