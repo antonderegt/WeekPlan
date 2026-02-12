@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { Ingredient, Recipe, RecipeIngredient } from '../types';
 import Modal from './Modal';
 import { createId } from '../utils/uuid';
@@ -18,9 +18,18 @@ export default function RecipeEditor({
   onClose,
   onSave
 }: RecipeEditorProps) {
+  interface ComboState {
+    isOpen: boolean;
+    query: string;
+    highlightedIndex: number;
+  }
+
   const [name, setName] = useState('');
   const [items, setItems] = useState<RecipeIngredient[]>([]);
   const [stepsText, setStepsText] = useState('');
+  const [comboStates, setComboStates] = useState<Record<number, ComboState>>({});
+  const [pendingFocusIndex, setPendingFocusIndex] = useState<number | null>(null);
+  const ingredientInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
 
   const ingredientMap = useMemo(() => new Map(ingredients.map((item) => [item.id, item])), [ingredients]);
 
@@ -29,19 +38,32 @@ export default function RecipeEditor({
     setName(initial?.name ?? '');
     setItems(initial?.ingredients ?? []);
     setStepsText(initial?.steps?.join('\n') ?? '');
+    setComboStates({});
+    setPendingFocusIndex(null);
+    ingredientInputRefs.current = {};
   }, [isOpen, initial]);
+
+  useEffect(() => {
+    if (pendingFocusIndex === null) return;
+    const input = ingredientInputRefs.current[pendingFocusIndex];
+    if (!input) return;
+    input.focus();
+    setComboState(pendingFocusIndex, { isOpen: true });
+    setPendingFocusIndex(null);
+  }, [pendingFocusIndex]);
 
   const handleAddItem = () => {
     if (ingredients.length === 0) return;
-    const first = ingredients[0];
+    const nextIndex = items.length;
     setItems((prev) => [
       ...prev,
       {
-        ingredientId: first.id,
+        ingredientId: '',
         quantity: 1,
-        unit: first.unit
+        unit: ''
       }
     ]);
+    setPendingFocusIndex(nextIndex);
   };
 
   const updateItem = (index: number, updates: Partial<RecipeIngredient>) => {
@@ -55,6 +77,43 @@ export default function RecipeEditor({
 
   const removeItem = (index: number) => {
     setItems((prev) => prev.filter((_, idx) => idx !== index));
+    setComboStates((prev) => {
+      const next: Record<number, ComboState> = {};
+      Object.entries(prev).forEach(([key, value]) => {
+        const parsed = Number(key);
+        if (parsed < index) next[parsed] = value;
+        if (parsed > index) next[parsed - 1] = value;
+      });
+      return next;
+    });
+  };
+
+  const getIngredientName = (ingredientId: string) => ingredientMap.get(ingredientId)?.name ?? '';
+
+  const setComboState = (index: number, nextState: Partial<ComboState>) => {
+    setComboStates((prev) => {
+      const previous = prev[index] ?? {
+        isOpen: false,
+        query: getIngredientName(items[index]?.ingredientId ?? ''),
+        highlightedIndex: 0
+      };
+      return {
+        ...prev,
+        [index]: { ...previous, ...nextState }
+      };
+    });
+  };
+
+  const selectIngredient = (index: number, ingredient: Ingredient) => {
+    updateItem(index, {
+      ingredientId: ingredient.id,
+      unit: ingredient.unit
+    });
+    setComboState(index, {
+      isOpen: false,
+      query: ingredient.name,
+      highlightedIndex: 0
+    });
   };
 
   const canSave = name.trim().length > 0;
@@ -112,25 +171,132 @@ export default function RecipeEditor({
           <div className="ingredient-editor">
             {items.map((item, index) => {
               const ingredient = ingredientMap.get(item.ingredientId);
+              const ingredientName = ingredient?.name ?? '';
+              const comboState = comboStates[index] ?? {
+                isOpen: false,
+                query: ingredientName,
+                highlightedIndex: 0
+              };
+              const query = comboState.isOpen ? comboState.query : ingredientName;
+              const normalizedQuery = comboState.query.trim().toLowerCase();
+              const filteredIngredients = normalizedQuery
+                ? ingredients.filter((option) => option.name.toLowerCase().includes(normalizedQuery))
+                : ingredients;
+              const highlightedIndex =
+                filteredIngredients.length === 0
+                  ? -1
+                  : Math.min(comboState.highlightedIndex, filteredIngredients.length - 1);
+              const listboxId = `ingredient-listbox-${index}`;
+              const activeDescendantId =
+                highlightedIndex >= 0 ? `ingredient-option-${index}-${highlightedIndex}` : undefined;
+
               return (
                 <div key={`${item.ingredientId}-${index}`} className="ingredient-row">
-                  <select
-                    value={item.ingredientId}
-                    onChange={(event) => {
-                      const nextId = event.target.value;
-                      const nextIngredient = ingredientMap.get(nextId);
-                      updateItem(index, {
-                        ingredientId: nextId,
-                        unit: item.unit?.trim() ? item.unit : nextIngredient?.unit ?? ''
-                      });
-                    }}
-                  >
-                    {ingredients.map((option) => (
-                      <option key={option.id} value={option.id}>
-                        {option.name}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="ingredient-combobox">
+                    <input
+                      ref={(element) => {
+                        ingredientInputRefs.current[index] = element;
+                      }}
+                      className="ingredient-combobox-input"
+                      role="combobox"
+                      aria-autocomplete="list"
+                      aria-expanded={comboState.isOpen}
+                      aria-controls={listboxId}
+                      aria-activedescendant={activeDescendantId}
+                      value={query}
+                      onFocus={() =>
+                        setComboState(index, {
+                          isOpen: true,
+                          query: ingredientName,
+                          highlightedIndex: Math.max(
+                            0,
+                            filteredIngredients.findIndex((option) => option.id === item.ingredientId)
+                          )
+                        })
+                      }
+                      onBlur={() =>
+                        setComboState(index, {
+                          isOpen: false,
+                          query: ingredientName,
+                          highlightedIndex: 0
+                        })
+                      }
+                      onChange={(event) =>
+                        setComboState(index, {
+                          isOpen: true,
+                          query: event.target.value,
+                          highlightedIndex: 0
+                        })
+                      }
+                      onKeyDown={(event) => {
+                        if (event.key === 'ArrowDown') {
+                          event.preventDefault();
+                          if (!comboState.isOpen) {
+                            setComboState(index, { isOpen: true });
+                            return;
+                          }
+                          if (filteredIngredients.length === 0) return;
+                          setComboState(index, {
+                            highlightedIndex: Math.min(
+                              Math.max(0, comboState.highlightedIndex) + 1,
+                              filteredIngredients.length - 1
+                            )
+                          });
+                        }
+                        if (event.key === 'ArrowUp') {
+                          event.preventDefault();
+                          if (!comboState.isOpen) {
+                            setComboState(index, { isOpen: true });
+                            return;
+                          }
+                          if (filteredIngredients.length === 0) return;
+                          setComboState(index, {
+                            highlightedIndex: Math.max(0, comboState.highlightedIndex - 1)
+                          });
+                        }
+                        if (event.key === 'Enter') {
+                          if (!comboState.isOpen) return;
+                          event.preventDefault();
+                          const selected = filteredIngredients[highlightedIndex];
+                          if (!selected) return;
+                          selectIngredient(index, selected);
+                        }
+                        if (event.key === 'Escape') {
+                          event.preventDefault();
+                          setComboState(index, {
+                            isOpen: false,
+                            query: ingredientName,
+                            highlightedIndex: 0
+                          });
+                        }
+                      }}
+                    />
+                    {comboState.isOpen ? (
+                      <ul id={listboxId} role="listbox" className="ingredient-combobox-list">
+                        {filteredIngredients.length === 0 ? (
+                          <li className="ingredient-combobox-empty" aria-disabled="true">
+                            No matches
+                          </li>
+                        ) : (
+                          filteredIngredients.map((option, optionIndex) => (
+                            <li
+                              key={option.id}
+                              id={`ingredient-option-${index}-${optionIndex}`}
+                              role="option"
+                              aria-selected={optionIndex === highlightedIndex}
+                              className={optionIndex === highlightedIndex ? 'is-active' : undefined}
+                              onMouseDown={(event) => {
+                                event.preventDefault();
+                                selectIngredient(index, option);
+                              }}
+                            >
+                              {option.name}
+                            </li>
+                          ))
+                        )}
+                      </ul>
+                    ) : null}
+                  </div>
                   <input
                     type="number"
                     min={0}
@@ -152,9 +318,10 @@ export default function RecipeEditor({
           </div>
         )}
       </div>
-      <div className="detail-section">
+      <div className="detail-section recipe-steps-section">
         <h4>Steps</h4>
         <textarea
+          className="recipe-steps-textarea"
           rows={6}
           value={stepsText}
           onChange={(event) => setStepsText(event.target.value)}

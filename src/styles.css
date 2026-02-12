@@ -289,8 +289,92 @@ textarea {
   min-width: 0;
 }
 
+.ingredient-combobox {
+  position: relative;
+}
+
+.ingredient-combobox-input {
+  width: 100%;
+}
+
+.ingredient-combobox-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.ingredient-combobox-list li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.ingredient-combobox-list li.is-active {
+  background: var(--accent-soft);
+}
+
+.ingredient-combobox-list li.ingredient-combobox-empty {
+  cursor: default;
+  color: var(--muted);
+}
+
 .ingredient-row button {
   justify-self: end;
+}
+
+.recipe-steps-textarea {
+  width: 100%;
+  display: block;
+  box-sizing: border-box;
+}
+
+.meal-recipe-combobox {
+  position: relative;
+}
+
+.meal-recipe-combobox-input {
+  width: 100%;
+}
+
+.meal-recipe-combobox-list {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 6px 0;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  max-height: 220px;
+  overflow-y: auto;
+  z-index: 20;
+}
+
+.meal-recipe-combobox-list li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+
+.meal-recipe-combobox-list li.is-active {
+  background: var(--accent-soft);
+}
+
+.meal-recipe-combobox-list li.meal-recipe-combobox-empty {
+  cursor: default;
+  color: var(--muted);
 }
 
 .modal-backdrop {
