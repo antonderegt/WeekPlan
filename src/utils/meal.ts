@@ -1,5 +1,5 @@
 import type { DayMealEntry, Ingredient, MealBlock, Pattern, Recipe, Settings, ShoppingItem } from '../types';
-import { fromISODate, getWeekStart } from './date';
+import { fromISODate, getWeekStart } from './date.js';
 
 export function mod(value: number, modulo: number): number {
   if (modulo === 0) return 0;
