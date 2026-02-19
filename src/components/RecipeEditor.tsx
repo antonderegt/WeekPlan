@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { Ingredient, Recipe, RecipeIngredient } from '../types';
 import Modal from './Modal';
 import { createId } from '../utils/uuid';
+import { useData } from '../store/DataContext';
 
 interface RecipeEditorProps {
   isOpen: boolean;
@@ -24,12 +25,16 @@ export default function RecipeEditor({
     highlightedIndex: number;
   }
 
+  const { upsertIngredient } = useData();
+
   const [name, setName] = useState('');
   const [items, setItems] = useState<RecipeIngredient[]>([]);
   const [stepsText, setStepsText] = useState('');
   const [comboStates, setComboStates] = useState<Record<number, ComboState>>({});
   const [pendingFocusIndex, setPendingFocusIndex] = useState<number | null>(null);
   const ingredientInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
+  const quantityInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
+  const comboboxWrapperRefs = useRef<Record<number, HTMLDivElement | null>>({});
 
   const ingredientMap = useMemo(() => new Map(ingredients.map((item) => [item.id, item])), [ingredients]);
 
@@ -53,7 +58,6 @@ export default function RecipeEditor({
   }, [pendingFocusIndex]);
 
   const handleAddItem = () => {
-    if (ingredients.length === 0) return;
     const nextIndex = items.length;
     setItems((prev) => [
       ...prev,
@@ -159,13 +163,11 @@ export default function RecipeEditor({
       <div className="detail-section">
         <div className="section-header">
           <h4>Ingredients</h4>
-          <button type="button" className="ghost" onClick={handleAddItem} disabled={ingredients.length === 0}>
+          <button type="button" className="ghost" onClick={handleAddItem}>
             Add ingredient
           </button>
         </div>
-        {ingredients.length === 0 ? (
-          <p className="empty-state">Add ingredients to the catalog first.</p>
-        ) : items.length === 0 ? (
+        {items.length === 0 ? (
           <p className="empty-state">No ingredients added.</p>
         ) : (
           <div className="ingredient-editor">
@@ -192,7 +194,18 @@ export default function RecipeEditor({
 
               return (
                 <div key={`${item.ingredientId}-${index}`} className="ingredient-row">
-                  <div className="ingredient-combobox">
+                  <div
+                    className="ingredient-combobox"
+                    ref={(el) => { comboboxWrapperRefs.current[index] = el; }}
+                    onBlur={(event) => {
+                      if ((event.currentTarget as HTMLDivElement).contains(event.relatedTarget as Node)) return;
+                      setComboState(index, {
+                        isOpen: false,
+                        query: ingredientName,
+                        highlightedIndex: 0
+                      });
+                    }}
+                  >
                     <input
                       ref={(element) => {
                         ingredientInputRefs.current[index] = element;
@@ -212,13 +225,6 @@ export default function RecipeEditor({
                             0,
                             filteredIngredients.findIndex((option) => option.id === item.ingredientId)
                           )
-                        })
-                      }
-                      onBlur={() =>
-                        setComboState(index, {
-                          isOpen: false,
-                          query: ingredientName,
-                          highlightedIndex: 0
                         })
                       }
                       onChange={(event) =>
@@ -298,6 +304,7 @@ export default function RecipeEditor({
                     ) : null}
                   </div>
                   <input
+                    ref={(element) => { quantityInputRefs.current[index] = element; }}
                     type="number"
                     min={0}
                     step="0.1"
