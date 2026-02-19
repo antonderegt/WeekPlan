@@ -499,6 +499,67 @@ textarea {
   color: var(--danger);
 }
 
+.bottom-nav {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 56px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  z-index: 10;
+}
+
+.bottom-nav a {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  color: var(--muted);
+  font-size: 0.65rem;
+  font-weight: 500;
+  padding: 6px 0;
+}
+
+.bottom-nav a.active {
+  color: var(--accent);
+}
+
+.bottom-nav a svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mobile-week-nav {
+  display: none;
+  align-items: center;
+  gap: 4px;
+}
+
+.mobile-week-nav button {
+  padding: 6px 8px;
+  line-height: 1;
+}
+
+.mobile-week-nav button svg {
+  width: 16px;
+  height: 16px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  display: block;
+}
+
 @media (max-width: 1000px) {
   .week-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -517,18 +578,68 @@ textarea {
 
 @media (max-width: 700px) {
   main {
-    padding: 20px;
+    padding: 12px;
+    padding-bottom: 72px;
+  }
+
+  .top-bar {
+    padding: 10px 16px;
+  }
+
+  .top-bar nav,
+  .pattern-chip {
+    display: none;
+  }
+
+  .bottom-nav {
+    display: flex;
   }
 
   .week-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .week-grid .day-card:last-child {
+    grid-column: 1 / -1;
+  }
+
+  .day-card {
+    padding: 10px;
+    min-height: unset;
+    gap: 6px;
+  }
+
+  .day-card h3 {
+    font-size: 0.85rem;
+  }
+
+  .page-header {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .page-header h2 {
+    display: none;
+  }
+
+  .page-header p {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--ink);
+  }
+
+  .week-actions {
+    display: none;
+  }
+
+  .mobile-week-nav {
+    display: flex;
   }
 
   .ingredient-row {
     grid-template-columns: 1fr;
-  }
-
-  .page-header {
-    flex-direction: column;
   }
 }
