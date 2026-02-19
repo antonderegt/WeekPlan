@@ -141,7 +141,12 @@ export default function RecipeEditor({
 
   const handleCreateIngredient = async (index: number, name: string, unit: string) => {
     const newIngredient: Ingredient = { id: createId(), name: name.trim(), unit: unit.trim() };
-    await upsertIngredient(newIngredient);
+    try {
+      await upsertIngredient(newIngredient);
+    } catch {
+      alert('Failed to create ingredient. Please try again.');
+      return;
+    }
     selectIngredient(index, newIngredient);
     setTimeout(() => {
       quantityInputRefs.current[index]?.focus();
@@ -332,9 +337,20 @@ export default function RecipeEditor({
                               placeholder="Name"
                               onChange={(event) => setComboState(index, { newIngredientName: event.target.value })}
                               onKeyDown={(event) => {
+                                if (event.key === 'Enter') {
+                                  event.preventDefault();
+                                  const name = comboState.newIngredientName.trim();
+                                  const unit = comboState.newIngredientUnit.trim();
+                                  if (name && unit) {
+                                    void handleCreateIngredient(index, name, unit);
+                                  } else {
+                                    // Advance focus to unit field
+                                    newIngredientUnitRefs.current[index]?.focus();
+                                  }
+                                }
                                 if (event.key === 'Escape') {
                                   event.preventDefault();
-                                  setComboState(index, { createMode: false });
+                                  setComboState(index, { createMode: false, newIngredientName: '', newIngredientUnit: '' });
                                 }
                               }}
                             />
@@ -351,7 +367,7 @@ export default function RecipeEditor({
                                 }
                                 if (event.key === 'Escape') {
                                   event.preventDefault();
-                                  setComboState(index, { createMode: false });
+                                  setComboState(index, { createMode: false, newIngredientName: '', newIngredientUnit: '' });
                                 }
                               }}
                             />
@@ -362,7 +378,7 @@ export default function RecipeEditor({
                               className="ghost"
                               onMouseDown={(event) => {
                                 event.preventDefault();
-                                setComboState(index, { createMode: false });
+                                setComboState(index, { createMode: false, newIngredientName: '', newIngredientUnit: '' });
                               }}
                             >
                               Cancel
