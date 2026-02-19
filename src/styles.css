@@ -663,4 +663,13 @@ textarea {
     flex-direction: column;
     align-items: flex-start;
   }
+
+  /* Settings: wrap pattern rows so action buttons don't overflow */
+  .pattern-row {
+    flex-wrap: wrap;
+  }
+
+  .pattern-actions {
+    flex-wrap: wrap;
+  }
 }
