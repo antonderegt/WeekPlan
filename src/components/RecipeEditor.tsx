@@ -23,6 +23,9 @@ export default function RecipeEditor({
     isOpen: boolean;
     query: string;
     highlightedIndex: number;
+    createMode: boolean;
+    newIngredientName: string;
+    newIngredientUnit: string;
   }
 
   const { upsertIngredient } = useData();
@@ -32,6 +35,7 @@ export default function RecipeEditor({
   const [stepsText, setStepsText] = useState('');
   const [comboStates, setComboStates] = useState<Record<number, ComboState>>({});
   const [pendingFocusIndex, setPendingFocusIndex] = useState<number | null>(null);
+  const [pendingCreateFocusIndex, setPendingCreateFocusIndex] = useState<number | null>(null);
   const ingredientInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
   const quantityInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
   const comboboxWrapperRefs = useRef<Record<number, HTMLDivElement | null>>({});
@@ -99,7 +103,10 @@ export default function RecipeEditor({
       const previous = prev[index] ?? {
         isOpen: false,
         query: getIngredientName(items[index]?.ingredientId ?? ''),
-        highlightedIndex: 0
+        highlightedIndex: 0,
+        createMode: false,
+        newIngredientName: '',
+        newIngredientUnit: ''
       };
       return {
         ...prev,
@@ -116,7 +123,10 @@ export default function RecipeEditor({
     setComboState(index, {
       isOpen: false,
       query: ingredient.name,
-      highlightedIndex: 0
+      highlightedIndex: 0,
+      createMode: false,
+      newIngredientName: '',
+      newIngredientUnit: ''
     });
   };
 
@@ -177,17 +187,23 @@ export default function RecipeEditor({
               const comboState = comboStates[index] ?? {
                 isOpen: false,
                 query: ingredientName,
-                highlightedIndex: 0
+                highlightedIndex: 0,
+                createMode: false,
+                newIngredientName: '',
+                newIngredientUnit: ''
               };
               const query = comboState.isOpen ? comboState.query : ingredientName;
               const normalizedQuery = comboState.query.trim().toLowerCase();
               const filteredIngredients = normalizedQuery
                 ? ingredients.filter((option) => option.name.toLowerCase().includes(normalizedQuery))
                 : ingredients;
+              const showCreateOption = normalizedQuery.length > 0;
+              const createOptionIndex = filteredIngredients.length;
+              const totalOptions = filteredIngredients.length + (showCreateOption ? 1 : 0);
               const highlightedIndex =
-                filteredIngredients.length === 0
+                totalOptions === 0
                   ? -1
-                  : Math.min(comboState.highlightedIndex, filteredIngredients.length - 1);
+                  : Math.min(comboState.highlightedIndex, totalOptions - 1);
               const listboxId = `ingredient-listbox-${index}`;
               const activeDescendantId =
                 highlightedIndex >= 0 ? `ingredient-option-${index}-${highlightedIndex}` : undefined;
@@ -202,7 +218,10 @@ export default function RecipeEditor({
                       setComboState(index, {
                         isOpen: false,
                         query: ingredientName,
-                        highlightedIndex: 0
+                        highlightedIndex: 0,
+                        createMode: false,
+                        newIngredientName: '',
+                        newIngredientUnit: ''
                       });
                     }}
                   >
@@ -241,11 +260,11 @@ export default function RecipeEditor({
                             setComboState(index, { isOpen: true });
                             return;
                           }
-                          if (filteredIngredients.length === 0) return;
+                          if (totalOptions === 0) return;
                           setComboState(index, {
                             highlightedIndex: Math.min(
                               Math.max(0, comboState.highlightedIndex) + 1,
-                              filteredIngredients.length - 1
+                              totalOptions - 1
                             )
                           });
                         }
@@ -255,7 +274,7 @@ export default function RecipeEditor({
                             setComboState(index, { isOpen: true });
                             return;
                           }
-                          if (filteredIngredients.length === 0) return;
+                          if (totalOptions === 0) return;
                           setComboState(index, {
                             highlightedIndex: Math.max(0, comboState.highlightedIndex - 1)
                           });
@@ -263,6 +282,14 @@ export default function RecipeEditor({
                         if (event.key === 'Enter') {
                           if (!comboState.isOpen) return;
                           event.preventDefault();
+                          if (showCreateOption && highlightedIndex === createOptionIndex) {
+                            setComboState(index, {
+                              createMode: true,
+                              newIngredientName: comboState.query.trim()
+                            });
+                            setPendingCreateFocusIndex(index);
+                            return;
+                          }
                           const selected = filteredIngredients[highlightedIndex];
                           if (!selected) return;
                           selectIngredient(index, selected);
@@ -279,26 +306,38 @@ export default function RecipeEditor({
                     />
                     {comboState.isOpen ? (
                       <ul id={listboxId} role="listbox" className="ingredient-combobox-list">
-                        {filteredIngredients.length === 0 ? (
-                          <li className="ingredient-combobox-empty" aria-disabled="true">
-                            No matches
+                        {filteredIngredients.map((option, optionIndex) => (
+                          <li
+                            key={option.id}
+                            id={`ingredient-option-${index}-${optionIndex}`}
+                            role="option"
+                            aria-selected={optionIndex === highlightedIndex}
+                            className={optionIndex === highlightedIndex ? 'is-active' : undefined}
+                            onMouseDown={(event) => {
+                              event.preventDefault();
+                              selectIngredient(index, option);
+                            }}
+                          >
+                            {option.name}
                           </li>
-                        ) : (
-                          filteredIngredients.map((option, optionIndex) => (
-                            <li
-                              key={option.id}
-                              id={`ingredient-option-${index}-${optionIndex}`}
-                              role="option"
-                              aria-selected={optionIndex === highlightedIndex}
-                              className={optionIndex === highlightedIndex ? 'is-active' : undefined}
-                              onMouseDown={(event) => {
-                                event.preventDefault();
-                                selectIngredient(index, option);
-                              }}
-                            >
-                              {option.name}
-                            </li>
-                          ))
+                        ))}
+                        {showCreateOption && (
+                          <li
+                            id={`ingredient-option-${index}-${createOptionIndex}`}
+                            role="option"
+                            aria-selected={highlightedIndex === createOptionIndex}
+                            className={`ingredient-combobox-create${highlightedIndex === createOptionIndex ? ' is-active' : ''}`}
+                            onMouseDown={(event) => {
+                              event.preventDefault();
+                              setComboState(index, {
+                                createMode: true,
+                                newIngredientName: comboState.query.trim()
+                              });
+                              setPendingCreateFocusIndex(index);
+                            }}
+                          >
+                            Create "{comboState.query.trim()}"
+                          </li>
                         )}
                       </ul>
                     ) : null}
