@@ -129,13 +129,13 @@ export default function WeekView() {
           </p>
         </div>
         <div className="week-actions">
-          <button type="button" className="ghost" onClick={() => setWeekOffset((prev) => prev - 1)}>
+          <button type="button" className="ghost" aria-label="Previous week" onClick={() => setWeekOffset((prev) => prev - 1)}>
             Previous week
           </button>
           <button type="button" className="ghost" onClick={() => setWeekOffset(0)}>
             Today
           </button>
-          <button type="button" className="ghost" onClick={() => setWeekOffset((prev) => prev + 1)}>
+          <button type="button" className="ghost" aria-label="Next week" onClick={() => setWeekOffset((prev) => prev + 1)}>
             Next week
           </button>
           <button type="button" onClick={() => setShoppingOpen(true)}>
@@ -143,13 +143,13 @@ export default function WeekView() {
           </button>
         </div>
         <div className="mobile-week-nav">
-          <button type="button" className="ghost" onClick={() => setWeekOffset((prev) => prev - 1)}>
+          <button type="button" className="ghost" aria-label="Previous week" onClick={() => setWeekOffset((prev) => prev - 1)}>
             <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
           </button>
-          <button type="button" className="ghost" onClick={() => setShoppingOpen(true)}>
+          <button type="button" className="ghost" aria-label="Shopping list" onClick={() => setShoppingOpen(true)}>
             <svg viewBox="0 0 24 24"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
           </button>
-          <button type="button" className="ghost" onClick={() => setWeekOffset((prev) => prev + 1)}>
+          <button type="button" className="ghost" aria-label="Next week" onClick={() => setWeekOffset((prev) => prev + 1)}>
             <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg>
           </button>
         </div>
