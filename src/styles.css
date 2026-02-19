@@ -328,6 +328,44 @@ textarea {
   color: var(--muted);
 }
 
+.ingredient-combobox-create {
+  color: var(--accent);
+  font-style: italic;
+}
+
+.ingredient-create-form {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.ingredient-create-label {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.ingredient-create-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ingredient-create-fields input {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.ingredient-create-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
 .ingredient-row button {
   justify-self: end;
 }
