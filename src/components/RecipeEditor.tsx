@@ -38,6 +38,7 @@ export default function RecipeEditor({
   const [pendingCreateFocusIndex, setPendingCreateFocusIndex] = useState<number | null>(null);
   const ingredientInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
   const quantityInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
+  const newIngredientUnitRefs = useRef<Record<number, HTMLInputElement | null>>({});
   const comboboxWrapperRefs = useRef<Record<number, HTMLDivElement | null>>({});
 
   const ingredientMap = useMemo(() => new Map(ingredients.map((item) => [item.id, item])), [ingredients]);
@@ -60,6 +61,14 @@ export default function RecipeEditor({
     setComboState(pendingFocusIndex, { isOpen: true });
     setPendingFocusIndex(null);
   }, [pendingFocusIndex]);
+
+  useEffect(() => {
+    if (pendingCreateFocusIndex === null) return;
+    const input = newIngredientUnitRefs.current[pendingCreateFocusIndex];
+    if (!input) return;
+    input.focus();
+    setPendingCreateFocusIndex(null);
+  }, [pendingCreateFocusIndex]);
 
   const handleAddItem = () => {
     const nextIndex = items.length;
@@ -128,6 +137,15 @@ export default function RecipeEditor({
       newIngredientName: '',
       newIngredientUnit: ''
     });
+  };
+
+  const handleCreateIngredient = async (index: number, name: string, unit: string) => {
+    const newIngredient: Ingredient = { id: createId(), name: name.trim(), unit: unit.trim() };
+    await upsertIngredient(newIngredient);
+    selectIngredient(index, newIngredient);
+    setTimeout(() => {
+      quantityInputRefs.current[index]?.focus();
+    }, 0);
   };
 
   const canSave = name.trim().length > 0;
@@ -305,41 +323,101 @@ export default function RecipeEditor({
                       }}
                     />
                     {comboState.isOpen ? (
-                      <ul id={listboxId} role="listbox" className="ingredient-combobox-list">
-                        {filteredIngredients.map((option, optionIndex) => (
-                          <li
-                            key={option.id}
-                            id={`ingredient-option-${index}-${optionIndex}`}
-                            role="option"
-                            aria-selected={optionIndex === highlightedIndex}
-                            className={optionIndex === highlightedIndex ? 'is-active' : undefined}
-                            onMouseDown={(event) => {
-                              event.preventDefault();
-                              selectIngredient(index, option);
-                            }}
-                          >
-                            {option.name}
-                          </li>
-                        ))}
-                        {showCreateOption && (
-                          <li
-                            id={`ingredient-option-${index}-${createOptionIndex}`}
-                            role="option"
-                            aria-selected={highlightedIndex === createOptionIndex}
-                            className={`ingredient-combobox-create${highlightedIndex === createOptionIndex ? ' is-active' : ''}`}
-                            onMouseDown={(event) => {
-                              event.preventDefault();
-                              setComboState(index, {
-                                createMode: true,
-                                newIngredientName: comboState.query.trim()
-                              });
-                              setPendingCreateFocusIndex(index);
-                            }}
-                          >
-                            Create "{comboState.query.trim()}"
-                          </li>
-                        )}
-                      </ul>
+                      comboState.createMode ? (
+                        <div className="ingredient-combobox-list ingredient-create-form">
+                          <p className="ingredient-create-label">New ingredient</p>
+                          <div className="ingredient-create-fields">
+                            <input
+                              value={comboState.newIngredientName}
+                              placeholder="Name"
+                              onChange={(event) => setComboState(index, { newIngredientName: event.target.value })}
+                              onKeyDown={(event) => {
+                                if (event.key === 'Escape') {
+                                  event.preventDefault();
+                                  setComboState(index, { createMode: false });
+                                }
+                              }}
+                            />
+                            <input
+                              ref={(element) => { newIngredientUnitRefs.current[index] = element; }}
+                              value={comboState.newIngredientUnit}
+                              placeholder="Unit (e.g. g, tbsp)"
+                              onChange={(event) => setComboState(index, { newIngredientUnit: event.target.value })}
+                              onKeyDown={(event) => {
+                                if (event.key === 'Enter') {
+                                  const name = comboState.newIngredientName.trim();
+                                  const unit = comboState.newIngredientUnit.trim();
+                                  if (name && unit) void handleCreateIngredient(index, name, unit);
+                                }
+                                if (event.key === 'Escape') {
+                                  event.preventDefault();
+                                  setComboState(index, { createMode: false });
+                                }
+                              }}
+                            />
+                          </div>
+                          <div className="ingredient-create-actions">
+                            <button
+                              type="button"
+                              className="ghost"
+                              onMouseDown={(event) => {
+                                event.preventDefault();
+                                setComboState(index, { createMode: false });
+                              }}
+                            >
+                              Cancel
+                            </button>
+                            <button
+                              type="button"
+                              disabled={!comboState.newIngredientName.trim() || !comboState.newIngredientUnit.trim()}
+                              onMouseDown={(event) => {
+                                event.preventDefault();
+                                const name = comboState.newIngredientName.trim();
+                                const unit = comboState.newIngredientUnit.trim();
+                                if (name && unit) void handleCreateIngredient(index, name, unit);
+                              }}
+                            >
+                              Create
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <ul id={listboxId} role="listbox" className="ingredient-combobox-list">
+                          {filteredIngredients.map((option, optionIndex) => (
+                            <li
+                              key={option.id}
+                              id={`ingredient-option-${index}-${optionIndex}`}
+                              role="option"
+                              aria-selected={optionIndex === highlightedIndex}
+                              className={optionIndex === highlightedIndex ? 'is-active' : undefined}
+                              onMouseDown={(event) => {
+                                event.preventDefault();
+                                selectIngredient(index, option);
+                              }}
+                            >
+                              {option.name}
+                            </li>
+                          ))}
+                          {showCreateOption && (
+                            <li
+                              id={`ingredient-option-${index}-${createOptionIndex}`}
+                              role="option"
+                              aria-selected={highlightedIndex === createOptionIndex}
+                              className={`ingredient-combobox-create${highlightedIndex === createOptionIndex ? ' is-active' : ''}`}
+                              onMouseDown={(event) => {
+                                event.preventDefault();
+                                setComboState(index, {
+                                  createMode: true,
+                                  newIngredientName: comboState.query.trim()
+                                });
+                                setPendingCreateFocusIndex(index);
+                              }}
+                            >
+                              Create "{comboState.query.trim()}"
+                            </li>
+                          )}
+                        </ul>
+                      )
                     ) : null}
                   </div>
                   <input
