@@ -393,6 +393,10 @@ textarea {
   padding: 20px;
   width: min(560px, 90vw);
   box-shadow: var(--shadow);
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .modal-header {
@@ -408,6 +412,8 @@ textarea {
 
 .modal-body {
   margin-top: 12px;
+  overflow-y: auto;
+  flex: 1;
 }
 
 .modal-footer {
