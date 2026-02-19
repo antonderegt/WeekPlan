@@ -652,21 +652,14 @@ textarea {
     grid-template-columns: 1fr;
   }
 
-  /* Responsive tables */
-  .table {
-    table-layout: fixed;
-  }
-
-  /* Hide middle columns (Recipes: col 2 = ingredient count, col 3 = step count; Ingredients: col 2 = unit) */
-  .table th:nth-child(2),
-  .table td:nth-child(2),
-  .table th:nth-child(3),
-  .table td:nth-child(3) {
+  /* Responsive tables: hide middle columns, keep Name and Actions */
+  .table th:not(:first-child):not(:last-child),
+  .table td:not(:first-child):not(:last-child) {
     display: none;
   }
 
   /* Stack action buttons vertically so they fit on screen */
-  .table td .actions {
+  .table td.actions {
     flex-direction: column;
     align-items: flex-start;
   }
