@@ -1,713 +1,723 @@
-@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600&family=Source+Sans+3:wght@400;500;600&display=swap");
 
 :root {
-  --bg: #f4f1ec;
-  --surface: #ffffff;
-  --surface-alt: #f9f6f1;
-  --ink: #1e1b16;
-  --muted: #6f655b;
-  --accent: #d6814d;
-  --accent-dark: #b76534;
-  --border: #e4d9cc;
-  --danger: #c44536;
-  --shadow: 0 10px 30px rgba(30, 27, 22, 0.08);
+    --bg: #f4f1ec;
+    --surface: #ffffff;
+    --surface-alt: #f9f6f1;
+    --ink: #1e1b16;
+    --muted: #6f655b;
+    --accent: #d6814d;
+    --accent-dark: #b76534;
+    --border: #e4d9cc;
+    --danger: #c44536;
+    --shadow: 0 10px 30px rgba(30, 27, 22, 0.08);
 }
 
 * {
-  box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  font-family: 'Source Sans 3', sans-serif;
-  background: radial-gradient(circle at top, #faf5ef 0%, var(--bg) 55%, #efe7dc 100%);
-  color: var(--ink);
+    margin: 0;
+    font-family: "Source Sans 3", sans-serif;
+    background: radial-gradient(
+        circle at top,
+        #faf5ef 0%,
+        var(--bg) 55%,
+        #efe7dc 100%
+    );
+    color: var(--ink);
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 
 .app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .top-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 32px;
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 32px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 .brand {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 600;
-  letter-spacing: 0.5px;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
 }
 
 nav {
-  display: flex;
-  gap: 18px;
+    display: flex;
+    gap: 18px;
 }
 
 nav a {
-  padding: 6px 10px;
-  border-radius: 999px;
-  color: var(--muted);
-  font-weight: 500;
+    padding: 6px 10px;
+    border-radius: 999px;
+    color: var(--muted);
+    font-weight: 500;
 }
 
 nav a.active {
-  background: var(--surface-alt);
-  color: var(--ink);
+    background: var(--surface-alt);
+    color: var(--ink);
 }
 
 .pattern-chip {
-  background: var(--surface-alt);
-  border-radius: 999px;
-  padding: 6px 12px;
-  font-size: 0.85rem;
-  color: var(--muted);
+    background: var(--surface-alt);
+    border-radius: 999px;
+    padding: 6px 12px;
+    font-size: 0.85rem;
+    color: var(--muted);
 }
 
 main {
-  flex: 1;
-  padding: 32px;
+    flex: 1;
+    padding: 32px;
 }
 
 .page {
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
 }
 
 .page-header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
 }
 
 .page-header h2 {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.8rem;
-  margin: 0;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1.8rem;
+    margin: 0;
 }
 
 .page-header p {
-  margin: 8px 0 0;
-  color: var(--muted);
+    margin: 8px 0 0;
+    color: var(--muted);
 }
 
 .week-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .card {
-  background: var(--surface);
-  border-radius: 18px;
-  padding: 24px;
-  box-shadow: var(--shadow);
-  border: 1px solid var(--border);
+    background: var(--surface);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: var(--shadow);
+    border: 1px solid var(--border);
 }
 
 .week-grid {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    gap: 16px;
 }
 
 .day-card {
-  background: var(--surface);
-  border-radius: 16px;
-  padding: 16px;
-  border: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  min-height: 140px;
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-height: 140px;
 }
 
 .day-card h3 {
-  margin: 0;
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1rem;
+    margin: 0;
+    font-family: "Space Grotesk", sans-serif;
+    font-size: 1rem;
 }
 
 .day-header {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
 }
 
 .day-date {
-  font-size: 0.8rem;
-  color: var(--muted);
+    font-size: 0.8rem;
+    color: var(--muted);
 }
 
 .meal-card {
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 12px;
-  text-align: left;
-  background: var(--surface-alt);
-  cursor: pointer;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 12px;
+    text-align: left;
+    background: var(--surface-alt);
+    cursor: pointer;
 }
 
 .meal-title {
-  font-weight: 600;
-  color: var(--accent-dark);
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: var(--accent-dark);
 }
 
 .meal-subtitle {
-  margin-top: 6px;
-  font-size: 0.85rem;
-  color: var(--muted);
+    margin-top: 6px;
+    font-size: 0.75rem;
+    color: var(--muted);
 }
 
 button {
-  border: none;
-  border-radius: 999px;
-  padding: 8px 16px;
-  background: var(--accent);
-  color: white;
-  font-weight: 600;
-  cursor: pointer;
+    border: none;
+    border-radius: 999px;
+    padding: 8px 16px;
+    background: var(--accent);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
 }
 
 button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+    opacity: 0.5;
+    cursor: not-allowed;
 }
 
 button.ghost {
-  background: var(--surface-alt);
-  color: var(--ink);
+    background: var(--surface-alt);
+    color: var(--ink);
 }
 
 button.danger {
-  background: var(--danger);
-  color: white;
+    background: var(--danger);
+    color: white;
 }
 
 button.ghost.danger {
-  background: transparent;
-  color: var(--danger);
+    background: transparent;
+    color: var(--danger);
 }
 
 .table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 .table th,
 .table td {
-  text-align: left;
-  padding: 12px 8px;
-  border-bottom: 1px solid var(--border);
+    text-align: left;
+    padding: 12px 8px;
+    border-bottom: 1px solid var(--border);
 }
 
 .table th {
-  color: var(--muted);
-  font-weight: 600;
-  font-size: 0.9rem;
+    color: var(--muted);
+    font-weight: 600;
+    font-size: 0.9rem;
 }
 
 .actions {
-  display: flex;
-  gap: 8px;
+    display: flex;
+    gap: 8px;
 }
 
 .empty-state {
-  color: var(--muted);
-  text-align: center;
-  padding: 18px 0;
+    color: var(--muted);
+    text-align: center;
+    padding: 18px 0;
 }
 
 .form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 16px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
 }
 
 label {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-weight: 600;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-weight: 600;
 }
 
 input,
 select,
 textarea {
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  font: inherit;
-  background: white;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    font: inherit;
+    background: white;
 }
 
 textarea {
-  resize: vertical;
+    resize: vertical;
 }
 
 .detail-section {
-  margin-top: 16px;
+    margin-top: 16px;
 }
 
 .section-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .ingredient-editor {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .ingredient-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1.3fr) minmax(0, 0.6fr) minmax(0, 0.6fr) auto;
-  gap: 10px;
-  align-items: center;
+    display: grid;
+    grid-template-columns:
+        minmax(0, 1.3fr) minmax(0, 0.6fr) minmax(0, 0.6fr)
+        auto;
+    gap: 10px;
+    align-items: center;
 }
 
 .ingredient-row > * {
-  min-width: 0;
+    min-width: 0;
 }
 
 .ingredient-combobox {
-  position: relative;
+    position: relative;
 }
 
 .ingredient-combobox-input {
-  width: 100%;
+    width: 100%;
 }
 
 .ingredient-combobox-list {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  margin: 0;
-  padding: 6px 0;
-  list-style: none;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--surface);
-  box-shadow: var(--shadow);
-  max-height: 220px;
-  overflow-y: auto;
-  z-index: 20;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 6px 0;
+    list-style: none;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 20;
 }
 
 .ingredient-combobox-list li {
-  padding: 8px 12px;
-  cursor: pointer;
+    padding: 8px 12px;
+    cursor: pointer;
 }
 
 .ingredient-combobox-list li.is-active {
-  background: var(--accent-soft);
+    background: var(--accent-soft);
 }
 
 .ingredient-combobox-list li.ingredient-combobox-empty {
-  cursor: default;
-  color: var(--muted);
+    cursor: default;
+    color: var(--muted);
 }
 
 .ingredient-combobox-create {
-  color: var(--accent);
-  font-style: italic;
+    color: var(--accent);
+    font-style: italic;
 }
 
 .ingredient-create-form {
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
 .ingredient-create-label {
-  margin: 0;
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: var(--muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+    margin: 0;
+    font-weight: 600;
+    font-size: 0.85rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
 .ingredient-create-fields {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
 }
 
 .ingredient-create-fields input {
-  width: 100%;
-  box-sizing: border-box;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .ingredient-create-actions {
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
 }
 
 .ingredient-row button {
-  justify-self: end;
+    justify-self: end;
 }
 
 .recipe-steps-textarea {
-  width: 100%;
-  display: block;
-  box-sizing: border-box;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
 }
 
 .meal-recipe-combobox {
-  position: relative;
+    position: relative;
 }
 
 .meal-recipe-combobox-input {
-  width: 100%;
+    width: 100%;
 }
 
 .meal-recipe-combobox-list {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  right: 0;
-  margin: 0;
-  padding: 6px 0;
-  list-style: none;
-  border: 1px solid var(--border);
-  border-radius: 10px;
-  background: var(--surface);
-  box-shadow: var(--shadow);
-  max-height: 220px;
-  overflow-y: auto;
-  z-index: 20;
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 6px 0;
+    list-style: none;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    background: var(--surface);
+    box-shadow: var(--shadow);
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 20;
 }
 
 .meal-recipe-combobox-list li {
-  padding: 8px 12px;
-  cursor: pointer;
+    padding: 8px 12px;
+    cursor: pointer;
 }
 
 .meal-recipe-combobox-list li.is-active {
-  background: var(--accent-soft);
+    background: var(--accent-soft);
 }
 
 .meal-recipe-combobox-list li.meal-recipe-combobox-empty {
-  cursor: default;
-  color: var(--muted);
+    cursor: default;
+    color: var(--muted);
 }
 
 .modal-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(18, 16, 12, 0.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 30;
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 16, 12, 0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 30;
 }
 
 .modal {
-  background: var(--surface);
-  border-radius: 16px;
-  padding: 20px;
-  width: min(560px, 90vw);
-  box-shadow: var(--shadow);
-  max-height: 90vh;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
+    background: var(--surface);
+    border-radius: 16px;
+    padding: 20px;
+    width: min(560px, 90vw);
+    box-shadow: var(--shadow);
+    max-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .modal-header h3 {
-  margin: 0;
-  font-family: 'Space Grotesk', sans-serif;
+    margin: 0;
+    font-family: "Space Grotesk", sans-serif;
 }
 
 .modal-body {
-  margin-top: 12px;
-  overflow-y: auto;
-  flex: 1;
+    margin-top: 12px;
+    overflow-y: auto;
+    flex: 1;
 }
 
 .modal-footer {
-  margin-top: 20px;
-  display: flex;
-  justify-content: flex-end;
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .modal-actions {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
 }
 
 .modal-label {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-top: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 12px;
 }
 
 .shopping-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .shopping-list li {
-  display: flex;
-  justify-content: space-between;
-  background: var(--surface-alt);
-  padding: 10px 12px;
-  border-radius: 12px;
+    display: flex;
+    justify-content: space-between;
+    background: var(--surface-alt);
+    padding: 10px 12px;
+    border-radius: 12px;
 }
 
 .pattern-list {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .pattern-row {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .pattern-row input {
-  flex: 1;
+    flex: 1;
 }
 
 .pattern-actions {
-  display: flex;
-  gap: 8px;
+    display: flex;
+    gap: 8px;
 }
 
 .helper {
-  color: var(--muted);
-  font-size: 0.9rem;
+    color: var(--muted);
+    font-size: 0.9rem;
 }
 
 .settings-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
 .data-actions {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-  margin-top: 12px;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 12px;
 }
 
 .data-status {
-  margin-top: 12px;
-  font-size: 0.9rem;
-  font-weight: 500;
+    margin-top: 12px;
+    font-size: 0.9rem;
+    font-weight: 500;
 }
 
 .data-status.success {
-  color: #2e7d32;
+    color: #2e7d32;
 }
 
 .data-status.error {
-  color: var(--danger);
+    color: var(--danger);
 }
 
 .bottom-nav {
-  display: none;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: calc(56px + env(safe-area-inset-bottom));
-  padding-bottom: env(safe-area-inset-bottom);
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  z-index: 10;
+    display: none;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: calc(56px + env(safe-area-inset-bottom));
+    padding-bottom: env(safe-area-inset-bottom);
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    z-index: 10;
 }
 
 .bottom-nav a {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  color: var(--muted);
-  font-size: 0.65rem;
-  font-weight: 500;
-  padding: 6px 0;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    color: var(--muted);
+    font-size: 0.65rem;
+    font-weight: 500;
+    padding: 6px 0;
 }
 
 .bottom-nav a.active {
-  color: var(--accent);
+    color: var(--accent);
 }
 
 .bottom-nav a svg {
-  width: 20px;
-  height: 20px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
 }
 
 .mobile-week-nav {
-  display: none;
-  align-items: center;
-  gap: 4px;
+    display: none;
+    align-items: center;
+    gap: 4px;
 }
 
 .mobile-week-nav button {
-  padding: 6px 8px;
-  line-height: 1;
+    padding: 6px 8px;
+    line-height: 1;
 }
 
 .mobile-week-nav button svg {
-  width: 16px;
-  height: 16px;
-  stroke: currentColor;
-  fill: none;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  display: block;
+    width: 16px;
+    height: 16px;
+    stroke: currentColor;
+    fill: none;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    display: block;
 }
 
 @media (max-width: 1000px) {
-  .week-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
+    .week-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
 
-  .top-bar {
-    flex-direction: column;
-    gap: 16px;
-    align-items: flex-start;
-  }
+    .top-bar {
+        flex-direction: column;
+        gap: 16px;
+        align-items: flex-start;
+    }
 
-  nav {
-    flex-wrap: wrap;
-  }
+    nav {
+        flex-wrap: wrap;
+    }
 }
 
 @media (max-width: 700px) {
-  body { overflow-x: hidden; }
+    body {
+        overflow-x: hidden;
+    }
 
-  main {
-    padding: 12px;
-    padding-bottom: calc(72px + env(safe-area-inset-bottom));
-  }
+    main {
+        padding: 12px;
+        padding-bottom: calc(72px + env(safe-area-inset-bottom));
+    }
 
-  .top-bar {
-    padding: 10px 16px;
-  }
+    .top-bar {
+        padding: 10px 16px;
+    }
 
-  .top-bar nav,
-  .pattern-chip {
-    display: none;
-  }
+    .top-bar nav,
+    .pattern-chip {
+        display: none;
+    }
 
-  .bottom-nav {
-    display: flex;
-  }
+    .bottom-nav {
+        display: flex;
+    }
 
-  .week-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
-  }
+    .week-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
 
-  .week-grid .day-card:last-child {
-    grid-column: 1 / -1;
-  }
+    .week-grid .day-card:last-child {
+        grid-column: 1 / -1;
+    }
 
-  .day-card {
-    padding: 10px;
-    min-height: unset;
-    gap: 6px;
-  }
+    .day-card {
+        padding: 10px;
+        min-height: unset;
+        gap: 6px;
+    }
 
-  .day-card h3 {
-    font-size: 0.85rem;
-  }
+    .day-card h3 {
+        font-size: 0.85rem;
+    }
 
-  .page-header {
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-  }
+    .page-header {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+    }
 
-  .page-header h2 {
-    display: none;
-  }
+    .page-header h2 {
+        display: none;
+    }
 
-  .page-header p {
-    margin: 0;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--ink);
-  }
+    .page-header p {
+        margin: 0;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--ink);
+    }
 
-  .week-actions {
-    display: none;
-  }
+    .week-actions {
+        display: none;
+    }
 
-  .mobile-week-nav {
-    display: flex;
-  }
+    .mobile-week-nav {
+        display: flex;
+    }
 
-  .ingredient-row {
-    grid-template-columns: 1fr;
-  }
+    .ingredient-row {
+        grid-template-columns: 1fr;
+    }
 
-  /* Responsive tables: hide middle columns, keep Name and Actions */
-  .table th:not(:first-child):not(:last-child),
-  .table td:not(:first-child):not(:last-child) {
-    display: none;
-  }
+    /* Responsive tables: hide middle columns, keep Name and Actions */
+    .table th:not(:first-child):not(:last-child),
+    .table td:not(:first-child):not(:last-child) {
+        display: none;
+    }
 
-  /* Stack action buttons vertically so they fit on screen */
-  .table td.actions {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+    /* Stack action buttons vertically so they fit on screen */
+    .table td.actions {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 
-  /* Settings: wrap pattern rows so action buttons don't overflow */
-  .pattern-row {
-    flex-wrap: wrap;
-  }
+    /* Settings: wrap pattern rows so action buttons don't overflow */
+    .pattern-row {
+        flex-wrap: wrap;
+    }
 
-  .pattern-actions {
-    flex-wrap: wrap;
-  }
+    .pattern-actions {
+        flex-wrap: wrap;
+    }
 }
