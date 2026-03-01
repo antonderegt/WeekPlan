@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import type { Recipe } from '../types';
 import Modal from './Modal';
 
@@ -33,6 +33,7 @@ export default function MealAssignModal({
     highlightedIndex: 0
   });
 
+  const recipeInputRef = useRef<HTMLInputElement | null>(null);
   const recipeMap = useMemo(() => new Map(recipes.map((item) => [item.id, item])), [recipes]);
   const selectedRecipeName = recipeMap.get(recipeId)?.name ?? '';
 
@@ -45,6 +46,7 @@ export default function MealAssignModal({
       query: recipes[0]?.name ?? '',
       highlightedIndex: 0
     });
+    setTimeout(() => recipeInputRef.current?.focus(), 0);
   }, [isOpen, recipes]);
 
   const canSave = recipeId && duration >= 1;
@@ -91,6 +93,7 @@ export default function MealAssignModal({
             Recipe
             <div className="meal-recipe-combobox">
               <input
+                ref={recipeInputRef}
                 className="meal-recipe-combobox-input"
                 role="combobox"
                 aria-autocomplete="list"

@@ -49,3 +49,8 @@ export interface ShoppingItem {
   unit: string;
   quantity: number;
 }
+
+export interface WeekOverride {
+  weekStartDate: string; // ISO date (YYYY-MM-DD) of the Monday for that week
+  mealBlocks: MealBlock[];
+}

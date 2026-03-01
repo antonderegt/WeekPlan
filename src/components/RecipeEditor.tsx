@@ -36,6 +36,7 @@ export default function RecipeEditor({
   const [comboStates, setComboStates] = useState<Record<number, ComboState>>({});
   const [pendingFocusIndex, setPendingFocusIndex] = useState<number | null>(null);
   const [pendingCreateFocusIndex, setPendingCreateFocusIndex] = useState<number | null>(null);
+  const nameInputRef = useRef<HTMLInputElement | null>(null);
   const ingredientInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
   const quantityInputRefs = useRef<Record<number, HTMLInputElement | null>>({});
   const newIngredientUnitRefs = useRef<Record<number, HTMLInputElement | null>>({});
@@ -51,6 +52,7 @@ export default function RecipeEditor({
     setComboStates({});
     setPendingFocusIndex(null);
     ingredientInputRefs.current = {};
+    setTimeout(() => nameInputRef.current?.focus(), 0);
   }, [isOpen, initial]);
 
   useEffect(() => {
@@ -190,7 +192,7 @@ export default function RecipeEditor({
       <div className="form-grid">
         <label>
           Name
-          <input value={name} onChange={(event) => setName(event.target.value)} />
+          <input ref={nameInputRef} value={name} onChange={(event) => setName(event.target.value)} />
         </label>
       </div>
       <div className="detail-section">

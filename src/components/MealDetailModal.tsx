@@ -8,6 +8,9 @@ interface MealDetailModalProps {
   ingredients: Ingredient[];
   onClose: () => void;
   onRemove?: () => void;
+  durationDays?: number;
+  maxDuration?: number;
+  onChangeDuration?: (days: number) => void;
 }
 
 export default function MealDetailModal({
@@ -15,7 +18,10 @@ export default function MealDetailModal({
   recipe,
   ingredients,
   onClose,
-  onRemove
+  onRemove,
+  durationDays,
+  maxDuration,
+  onChangeDuration
 }: MealDetailModalProps) {
   if (!recipe) {
     return <Modal title="Meal details" isOpen={isOpen} onClose={onClose}>No recipe selected.</Modal>;
@@ -41,6 +47,17 @@ export default function MealDetailModal({
         </div>
       }
     >
+      <div className="modal-scroll-content">
+      {onChangeDuration !== undefined && durationDays !== undefined && (
+        <div className="detail-section duration-control">
+          <h4>Days</h4>
+          <div className="duration-stepper">
+            <button type="button" onClick={() => onChangeDuration(durationDays - 1)} disabled={durationDays <= 1}>−</button>
+            <span>{durationDays}</span>
+            <button type="button" onClick={() => onChangeDuration(durationDays + 1)} disabled={durationDays >= (maxDuration ?? durationDays)}>+</button>
+          </div>
+        </div>
+      )}
       <div className="detail-section">
         <h4>Ingredients</h4>
         {recipe.ingredients.length === 0 ? (
@@ -70,6 +87,7 @@ export default function MealDetailModal({
             ))}
           </ol>
         )}
+      </div>
       </div>
     </Modal>
   );

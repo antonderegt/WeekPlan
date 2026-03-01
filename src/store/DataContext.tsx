@@ -1,17 +1,20 @@
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import type { Ingredient, Pattern, Recipe, Settings } from '../types';
+import type { Ingredient, Pattern, Recipe, Settings, WeekOverride } from '../types';
 import {
   deleteIngredient,
   deletePattern,
   deleteRecipe,
+  deleteWeekOverride,
   getIngredients,
   getPatterns,
   getRecipes,
   getSettings,
+  getWeekOverrides,
   saveIngredient,
   savePattern,
   saveRecipe,
-  saveSettings
+  saveSettings,
+  saveWeekOverride
 } from '../api/client';
 
 interface DataContextValue {
@@ -19,6 +22,7 @@ interface DataContextValue {
   recipes: Recipe[];
   patterns: Pattern[];
   settings: Settings | null;
+  weekOverrides: WeekOverride[];
   loading: boolean;
   error: string | null;
   refreshAll: () => Promise<void>;
@@ -30,6 +34,8 @@ interface DataContextValue {
   upsertPatterns: (patterns: Pattern[]) => Promise<void>;
   removePattern: (id: string) => Promise<void>;
   upsertSettings: (settings: Settings) => Promise<void>;
+  upsertWeekOverride: (override: WeekOverride) => Promise<void>;
+  removeWeekOverride: (weekStartDate: string) => Promise<void>;
 }
 
 const DataContext = createContext<DataContextValue | undefined>(undefined);
@@ -39,6 +45,7 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [patterns, setPatterns] = useState<Pattern[]>([]);
   const [settings, setSettings] = useState<Settings | null>(null);
+  const [weekOverrides, setWeekOverrides] = useState<WeekOverride[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -46,16 +53,18 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setLoading(true);
     setError(null);
     try {
-      const [nextIngredients, nextRecipes, nextPatterns, nextSettings] = await Promise.all([
+      const [nextIngredients, nextRecipes, nextPatterns, nextSettings, nextWeekOverrides] = await Promise.all([
         getIngredients(),
         getRecipes(),
         getPatterns(),
-        getSettings()
+        getSettings(),
+        getWeekOverrides()
       ]);
       setIngredients(nextIngredients);
       setRecipes(nextRecipes);
       setPatterns(nextPatterns);
       setSettings(nextSettings);
+      setWeekOverrides(nextWeekOverrides);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to load data.';
       setError(message);
@@ -132,12 +141,29 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
     setSettings(nextSettings);
   }, []);
 
+  const upsertWeekOverride = useCallback(async (override: WeekOverride) => {
+    await saveWeekOverride(override);
+    setWeekOverrides((prev) => {
+      const existing = prev.find((item) => item.weekStartDate === override.weekStartDate);
+      if (existing) {
+        return prev.map((item) => (item.weekStartDate === override.weekStartDate ? override : item));
+      }
+      return [...prev, override];
+    });
+  }, []);
+
+  const removeWeekOverride = useCallback(async (weekStartDate: string) => {
+    await deleteWeekOverride(weekStartDate);
+    setWeekOverrides((prev) => prev.filter((item) => item.weekStartDate !== weekStartDate));
+  }, []);
+
   const value = useMemo(
     () => ({
       ingredients,
       recipes,
       patterns,
       settings,
+      weekOverrides,
       loading,
       error,
       refreshAll,
@@ -148,13 +174,16 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       upsertPattern,
       upsertPatterns,
       removePattern,
-      upsertSettings
+      upsertSettings,
+      upsertWeekOverride,
+      removeWeekOverride
     }),
     [
       ingredients,
       recipes,
       patterns,
       settings,
+      weekOverrides,
       loading,
       error,
       refreshAll,
@@ -165,7 +194,9 @@ export function DataProvider({ children }: { children: React.ReactNode }) {
       upsertPattern,
       upsertPatterns,
       removePattern,
-      upsertSettings
+      upsertSettings,
+      upsertWeekOverride,
+      removeWeekOverride
     ]
   );
 

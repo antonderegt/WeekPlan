@@ -1,4 +1,4 @@
-import type { Ingredient, Pattern, Recipe, Settings } from '../types';
+import type { Ingredient, Pattern, Recipe, Settings, WeekOverride } from '../types';
 
 async function fetchJson<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
   const response = await fetch(input, init);
@@ -78,6 +78,22 @@ export function saveSettings(settings: Settings): Promise<void> {
       body: JSON.stringify(settings)
     }
   );
+}
+
+export function getWeekOverrides(): Promise<WeekOverride[]> {
+  return fetchJson('/api/week-overrides');
+}
+
+export function saveWeekOverride(override: WeekOverride): Promise<void> {
+  return fetchJson(`/api/week-overrides/${override.weekStartDate}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mealBlocks: override.mealBlocks })
+  });
+}
+
+export function deleteWeekOverride(weekStartDate: string): Promise<void> {
+  return fetchJson(`/api/week-overrides/${weekStartDate}`, { method: 'DELETE' });
 }
 
 export async function exportData(): Promise<void> {

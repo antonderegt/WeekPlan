@@ -33,6 +33,10 @@ db.exec(`
     patternStartDate TEXT NOT NULL,
     patternOrder_json TEXT NOT NULL
   );
+  CREATE TABLE IF NOT EXISTS week_overrides (
+    week_start_date TEXT PRIMARY KEY,
+    meal_blocks_json TEXT NOT NULL
+  );
 `);
 
 app.use(express.json({ limit: '1mb' }));
@@ -151,6 +155,36 @@ app.put('/api/settings', (req, res) => {
   db.prepare(
     'INSERT OR REPLACE INTO settings (id, patternStartDate, patternOrder_json) VALUES (?, ?, ?)'
   ).run(id, patternStartDate, JSON.stringify(patternOrder));
+  res.status(204).end();
+});
+
+// ── Week Overrides ───────────────────────────────────────────────────
+
+app.get('/api/week-overrides', (_req, res) => {
+  const rows = db.prepare('SELECT week_start_date, meal_blocks_json FROM week_overrides').all();
+  const overrides = rows.map((row) => ({
+    weekStartDate: row.week_start_date,
+    mealBlocks: parseJson(row.meal_blocks_json, [])
+  }));
+  res.json(overrides);
+});
+
+app.put('/api/week-overrides/:weekStartDate', (req, res) => {
+  const { weekStartDate } = req.params;
+  const { mealBlocks } = req.body ?? {};
+  if (!weekStartDate || !Array.isArray(mealBlocks)) {
+    res.status(400).send('Missing week override fields.');
+    return;
+  }
+  db.prepare('INSERT OR REPLACE INTO week_overrides (week_start_date, meal_blocks_json) VALUES (?, ?)').run(
+    weekStartDate,
+    JSON.stringify(mealBlocks)
+  );
+  res.status(204).end();
+});
+
+app.delete('/api/week-overrides/:weekStartDate', (req, res) => {
+  db.prepare('DELETE FROM week_overrides WHERE week_start_date = ?').run(req.params.weekStartDate);
   res.status(204).end();
 });
 
