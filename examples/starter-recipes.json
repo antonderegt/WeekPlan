@@ -1,0 +1,180 @@
+{
+  "version": 1,
+  "exportedAt": "2026-03-02T00:00:00.000Z",
+  "ingredients": [
+    { "id": "ing-chicken-thighs", "name": "Chicken thighs", "unit": "g" },
+    { "id": "ing-olive-oil", "name": "Olive oil", "unit": "tbsp" },
+    { "id": "ing-garlic", "name": "Garlic", "unit": "cloves" },
+    { "id": "ing-lemon", "name": "Lemon", "unit": "pcs" },
+    { "id": "ing-paprika", "name": "Paprika", "unit": "tsp" },
+    { "id": "ing-cumin", "name": "Cumin", "unit": "tsp" },
+    { "id": "ing-pasta", "name": "Pasta", "unit": "g" },
+    { "id": "ing-canned-tomatoes", "name": "Canned tomatoes", "unit": "g" },
+    { "id": "ing-onion", "name": "Onion", "unit": "pcs" },
+    { "id": "ing-ground-beef", "name": "Ground beef", "unit": "g" },
+    { "id": "ing-tomato-paste", "name": "Tomato paste", "unit": "tbsp" },
+    { "id": "ing-red-wine", "name": "Red wine", "unit": "ml" },
+    { "id": "ing-lentils", "name": "Red lentils", "unit": "g" },
+    { "id": "ing-coconut-milk", "name": "Coconut milk", "unit": "ml" },
+    { "id": "ing-curry-powder", "name": "Curry powder", "unit": "tsp" },
+    { "id": "ing-ginger", "name": "Fresh ginger", "unit": "g" },
+    { "id": "ing-spinach", "name": "Spinach", "unit": "g" },
+    { "id": "ing-rice", "name": "Basmati rice", "unit": "g" },
+    { "id": "ing-salmon", "name": "Salmon fillet", "unit": "g" },
+    { "id": "ing-soy-sauce", "name": "Soy sauce", "unit": "tbsp" },
+    { "id": "ing-sesame-oil", "name": "Sesame oil", "unit": "tsp" },
+    { "id": "ing-broccoli", "name": "Broccoli", "unit": "g" },
+    { "id": "ing-carrots", "name": "Carrots", "unit": "pcs" },
+    { "id": "ing-chicken-breast", "name": "Chicken breast", "unit": "g" },
+    { "id": "ing-black-beans", "name": "Black beans (canned)", "unit": "g" },
+    { "id": "ing-corn", "name": "Corn (canned)", "unit": "g" },
+    { "id": "ing-bell-pepper", "name": "Bell pepper", "unit": "pcs" },
+    { "id": "ing-tortillas", "name": "Flour tortillas", "unit": "pcs" },
+    { "id": "ing-cheddar", "name": "Cheddar cheese", "unit": "g" },
+    { "id": "ing-sour-cream", "name": "Sour cream", "unit": "g" },
+    { "id": "ing-butter", "name": "Butter", "unit": "g" },
+    { "id": "ing-flour", "name": "Flour", "unit": "g" },
+    { "id": "ing-chicken-stock", "name": "Chicken stock", "unit": "ml" },
+    { "id": "ing-cream", "name": "Heavy cream", "unit": "ml" },
+    { "id": "ing-mushrooms", "name": "Mushrooms", "unit": "g" },
+    { "id": "ing-thyme", "name": "Thyme", "unit": "tsp" }
+  ],
+  "recipes": [
+    {
+      "id": "rec-lemon-chicken",
+      "name": "Lemon herb chicken",
+      "ingredients": [
+        { "ingredientId": "ing-chicken-thighs", "quantity": 800, "unit": "g" },
+        { "ingredientId": "ing-olive-oil", "quantity": 3, "unit": "tbsp" },
+        { "ingredientId": "ing-garlic", "quantity": 4, "unit": "cloves" },
+        { "ingredientId": "ing-lemon", "quantity": 1, "unit": "pcs" },
+        { "ingredientId": "ing-paprika", "quantity": 1, "unit": "tsp" },
+        { "ingredientId": "ing-cumin", "quantity": 0.5, "unit": "tsp" }
+      ],
+      "steps": [
+        "Preheat oven to 200°C (180°C fan).",
+        "Mix olive oil, minced garlic, lemon zest and juice, paprika, and cumin in a bowl.",
+        "Toss chicken thighs in the marinade and season with salt and pepper.",
+        "Arrange on a baking tray and roast for 35–40 minutes until golden and cooked through.",
+        "Rest for 5 minutes before serving."
+      ]
+    },
+    {
+      "id": "rec-bolognese",
+      "name": "Beef bolognese",
+      "ingredients": [
+        { "ingredientId": "ing-ground-beef", "quantity": 600, "unit": "g" },
+        { "ingredientId": "ing-pasta", "quantity": 500, "unit": "g" },
+        { "ingredientId": "ing-canned-tomatoes", "quantity": 800, "unit": "g" },
+        { "ingredientId": "ing-onion", "quantity": 1, "unit": "pcs" },
+        { "ingredientId": "ing-garlic", "quantity": 3, "unit": "cloves" },
+        { "ingredientId": "ing-tomato-paste", "quantity": 2, "unit": "tbsp" },
+        { "ingredientId": "ing-red-wine", "quantity": 100, "unit": "ml" },
+        { "ingredientId": "ing-olive-oil", "quantity": 2, "unit": "tbsp" }
+      ],
+      "steps": [
+        "Finely dice the onion and mince the garlic.",
+        "Heat olive oil in a large pan over medium heat. Fry onion until soft, about 5 minutes.",
+        "Add garlic and cook for 1 minute, then add ground beef and brown, breaking it up.",
+        "Stir in tomato paste and cook for 2 minutes, then pour in red wine and simmer until reduced.",
+        "Add canned tomatoes, season with salt and pepper, and simmer on low heat for 30–40 minutes.",
+        "Cook pasta according to package instructions and serve with the sauce."
+      ]
+    },
+    {
+      "id": "rec-red-lentil-curry",
+      "name": "Red lentil & spinach curry",
+      "ingredients": [
+        { "ingredientId": "ing-lentils", "quantity": 250, "unit": "g" },
+        { "ingredientId": "ing-coconut-milk", "quantity": 400, "unit": "ml" },
+        { "ingredientId": "ing-canned-tomatoes", "quantity": 400, "unit": "g" },
+        { "ingredientId": "ing-onion", "quantity": 1, "unit": "pcs" },
+        { "ingredientId": "ing-garlic", "quantity": 3, "unit": "cloves" },
+        { "ingredientId": "ing-ginger", "quantity": 20, "unit": "g" },
+        { "ingredientId": "ing-curry-powder", "quantity": 2, "unit": "tsp" },
+        { "ingredientId": "ing-spinach", "quantity": 100, "unit": "g" },
+        { "ingredientId": "ing-rice", "quantity": 300, "unit": "g" },
+        { "ingredientId": "ing-olive-oil", "quantity": 2, "unit": "tbsp" }
+      ],
+      "steps": [
+        "Dice onion, mince garlic, and grate ginger.",
+        "Heat oil in a large pot over medium heat. Fry onion until soft.",
+        "Add garlic, ginger, and curry powder. Cook for 2 minutes, stirring.",
+        "Stir in lentils, canned tomatoes, and coconut milk. Bring to a boil.",
+        "Reduce heat and simmer for 20–25 minutes until lentils are tender.",
+        "Stir in spinach and cook until wilted. Season to taste.",
+        "Cook rice according to package instructions and serve alongside the curry."
+      ]
+    },
+    {
+      "id": "rec-teriyaki-salmon",
+      "name": "Teriyaki salmon with broccoli",
+      "ingredients": [
+        { "ingredientId": "ing-salmon", "quantity": 700, "unit": "g" },
+        { "ingredientId": "ing-soy-sauce", "quantity": 4, "unit": "tbsp" },
+        { "ingredientId": "ing-sesame-oil", "quantity": 2, "unit": "tsp" },
+        { "ingredientId": "ing-garlic", "quantity": 2, "unit": "cloves" },
+        { "ingredientId": "ing-ginger", "quantity": 10, "unit": "g" },
+        { "ingredientId": "ing-broccoli", "quantity": 400, "unit": "g" },
+        { "ingredientId": "ing-rice", "quantity": 300, "unit": "g" }
+      ],
+      "steps": [
+        "Mix soy sauce, sesame oil, minced garlic, and grated ginger to make the marinade.",
+        "Coat salmon fillets in the marinade and let sit for 15 minutes.",
+        "Heat a non-stick pan over medium-high heat. Cook salmon skin-side down for 4 minutes.",
+        "Flip and cook for another 3–4 minutes until cooked through. Baste with remaining marinade.",
+        "Steam or boil broccoli florets for 4–5 minutes until tender-crisp.",
+        "Serve salmon over rice with broccoli on the side."
+      ]
+    },
+    {
+      "id": "rec-chicken-burritos",
+      "name": "Chicken burritos",
+      "ingredients": [
+        { "ingredientId": "ing-chicken-breast", "quantity": 600, "unit": "g" },
+        { "ingredientId": "ing-black-beans", "quantity": 400, "unit": "g" },
+        { "ingredientId": "ing-corn", "quantity": 200, "unit": "g" },
+        { "ingredientId": "ing-bell-pepper", "quantity": 2, "unit": "pcs" },
+        { "ingredientId": "ing-tortillas", "quantity": 8, "unit": "pcs" },
+        { "ingredientId": "ing-cheddar", "quantity": 150, "unit": "g" },
+        { "ingredientId": "ing-sour-cream", "quantity": 100, "unit": "g" },
+        { "ingredientId": "ing-cumin", "quantity": 2, "unit": "tsp" },
+        { "ingredientId": "ing-paprika", "quantity": 1, "unit": "tsp" },
+        { "ingredientId": "ing-olive-oil", "quantity": 2, "unit": "tbsp" }
+      ],
+      "steps": [
+        "Season chicken with cumin, paprika, salt, and pepper.",
+        "Heat oil in a pan and cook chicken over medium-high heat for 6–7 minutes per side until cooked through. Slice into strips.",
+        "In the same pan, sauté sliced bell peppers until softened.",
+        "Warm the black beans and corn in a small pot.",
+        "Warm tortillas in a dry pan or microwave.",
+        "Layer chicken, peppers, beans, corn, cheese, and sour cream onto each tortilla and roll up tightly."
+      ]
+    },
+    {
+      "id": "rec-chicken-mushroom-pie",
+      "name": "Creamy chicken & mushroom pie",
+      "ingredients": [
+        { "ingredientId": "ing-chicken-breast", "quantity": 700, "unit": "g" },
+        { "ingredientId": "ing-mushrooms", "quantity": 300, "unit": "g" },
+        { "ingredientId": "ing-onion", "quantity": 1, "unit": "pcs" },
+        { "ingredientId": "ing-garlic", "quantity": 2, "unit": "cloves" },
+        { "ingredientId": "ing-butter", "quantity": 40, "unit": "g" },
+        { "ingredientId": "ing-flour", "quantity": 40, "unit": "g" },
+        { "ingredientId": "ing-chicken-stock", "quantity": 300, "unit": "ml" },
+        { "ingredientId": "ing-cream", "quantity": 150, "unit": "ml" },
+        { "ingredientId": "ing-thyme", "quantity": 1, "unit": "tsp" }
+      ],
+      "steps": [
+        "Dice chicken into bite-sized pieces. Slice mushrooms and onion.",
+        "Melt butter in a large pan over medium heat. Fry onion and garlic until soft.",
+        "Add chicken and cook until browned. Add mushrooms and thyme and cook for 3 more minutes.",
+        "Sprinkle flour over the mixture and stir to coat. Gradually pour in chicken stock, stirring constantly.",
+        "Add cream and simmer until the sauce thickens. Season with salt and pepper.",
+        "Pour filling into a baking dish. Top with pastry or mashed potato, then bake at 190°C for 25–30 minutes until golden."
+      ]
+    }
+  ],
+  "patterns": [],
+  "settings": null
+}
